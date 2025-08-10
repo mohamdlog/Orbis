@@ -1,0 +1,7 @@
+services:
+  main:
+    build: .
+    container_name: "main_container"
+    privileged: true
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
