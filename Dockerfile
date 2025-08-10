@@ -14,11 +14,11 @@ RUN wget https://github.com/mavlink/MAVSDK/releases/download/v3.9.0/libmavsdk-de
 
 WORKDIR /workspace
 
-COPY src/main.cpp .
+COPY . .
 COPY CMakeLists.txt .
 
 RUN mkdir build && cd build && \
     cmake .. && \
     make
 
-ENTRYPOINT ["/workspace/build/main"]
+ENTRYPOINT ["/workspace/build/orbis"]

@@ -1,46 +1,16 @@
+#include "monitor.hpp"
 #include <iostream>
-#include <thread>
 #include <chrono>
-#include <memory>
-#include <iomanip>
-#include <future>
+#include <thread>
 #include <csignal>
-#include <atomic>
+#include <memory>
+#include <future>
 
 #include <mavsdk/mavsdk.h>
+#include <mavsdk/system.h>
 #include <mavsdk/plugins/telemetry/telemetry.h>
 
 using namespace mavsdk;
-std::atomic<bool> g_stop{false};
-void signal_handler(int signum) {
-    g_stop = true;
-}
-
-static std::string flight_mode_to_str(Telemetry::FlightMode mode) {
-    switch (mode) {
-        case Telemetry::FlightMode::Unknown:        return "Unknown";
-        case Telemetry::FlightMode::Ready:          return "Ready";
-        case Telemetry::FlightMode::Takeoff:        return "Takeoff";
-        case Telemetry::FlightMode::Hold:           return "Hold";
-        case Telemetry::FlightMode::Mission:        return "Mission";
-        case Telemetry::FlightMode::ReturnToLaunch: return "ReturnToLaunch";
-        case Telemetry::FlightMode::Land:           return "Land";
-        case Telemetry::FlightMode::Offboard:       return "Offboard";
-        case Telemetry::FlightMode::FollowMe:       return "FollowMe";
-        default:                                    return "Other";
-    }
-}
-
-void setup_monitoring(Telemetry& telemetry) {
-    telemetry.subscribe_flight_mode([](Telemetry::FlightMode flight_mode) {
-        std::cout << "Flight Mode: " << flight_mode_to_str(flight_mode) << std::endl;
-    });
-
-    telemetry.subscribe_battery([](Telemetry::Battery battery) {
-        std::cout << "Battery: " << std::fixed << std::setprecision(1) 
-                  << battery.remaining_percent << " %" << std::endl;
-    });
-}
 
 int main() {
     std::signal(SIGINT, signal_handler);
@@ -65,8 +35,36 @@ int main() {
     });
 
     std::shared_ptr<System> system{fut.get()};
-    Telemetry telemetry(system);
-    setup_monitoring(telemetry);
+
+    std::cout 
+        << std::string(50, '_') << "\n" 
+        << std::string(20, ' ') << "Main Menu\n" 
+        << std::string(50, '_')
+        << "\nWelcome to the main menu. Enter your selection:\n\n"
+        << " 1. Read instructions\n"
+        << " 2. Start telemetry monitoring\n"
+        << " 3. Run control tests\n"
+        << std::string(50, '_') << "\n\n";
+    
+    short choice;
+    std::cin >> choice;
+    std::cin.ignore(1);
+
+    switch (choice) {
+        case 1: {
+            std::cout << "Not yet implemented.\n";
+            break;
+        }
+        case 2: {
+            Telemetry telemetry(system);
+            setup_monitoring(telemetry);
+            break;
+        }
+        case 3: {
+            std::cout << "Not yet implemented.\n";
+            break;
+        }
+    }
 
     while (!g_stop) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

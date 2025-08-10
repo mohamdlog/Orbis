@@ -1,7 +1,6 @@
 services:
   main:
     build: .
-    container_name: "main_container"
-    privileged: true
+    container_name: "orbis_container"
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
