@@ -8,8 +8,6 @@
 
 using namespace mavsdk;
 
-std::atomic<bool> g_stop{false};
-
 static std::string flight_mode_to_str(Telemetry::FlightMode mode) {
     switch (mode) {
         case Telemetry::FlightMode::Unknown:        return "Unknown";
@@ -25,7 +23,7 @@ static std::string flight_mode_to_str(Telemetry::FlightMode mode) {
     }
 }
 
-void setup_monitoring(Telemetry& telemetry) {
+void setup_monitoring(Telemetry &telemetry) {
     telemetry.subscribe_flight_mode([](Telemetry::FlightMode flight_mode) {
         std::cout << "Flight Mode: " << flight_mode_to_str(flight_mode) << std::endl;
     });
@@ -34,8 +32,4 @@ void setup_monitoring(Telemetry& telemetry) {
         std::cout << "Battery: " << std::fixed << std::setprecision(1) 
                   << battery.remaining_percent << " %" << std::endl;
     });
-}
-
-void signal_handler(int) {
-    g_stop = true;
 }

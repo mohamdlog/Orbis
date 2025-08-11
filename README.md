@@ -24,3 +24,9 @@ Nuke everything unused:
 ```bash
 docker system prune -a --volumes
 ```
+
+## Force Stop
+Kill docker:
+```bash
+docker kill $(docker ps -q)
+```
